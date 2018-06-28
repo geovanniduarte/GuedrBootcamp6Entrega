@@ -8,6 +8,12 @@ data class Forecast(private val maxTemp: Float,private val minTemp: Float, val h
 
     protected fun toFahrenheit(celsius: Float) = celsius * 1.8f + 32
 
+    init {
+        if (humidity !in 0f..100f) {
+            throw IllegalArgumentException("Humidity should be betwenn 0f and 100f")
+        }
+    }
+
     fun getMaxTemp(units: TemperatureUnit) =
         when (units) {
             TemperatureUnit.CELSIUS -> maxTemp
