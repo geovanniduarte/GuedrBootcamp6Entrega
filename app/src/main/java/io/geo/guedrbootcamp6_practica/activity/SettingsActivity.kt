@@ -1,10 +1,12 @@
-package io.geo.guedrbootcamp6_practica
+package io.geo.guedrbootcamp6_practica.activity
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import io.geo.guedrbootcamp6_practica.R
+import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import kotlinx.android.synthetic.main.activity_settings.*
 
 

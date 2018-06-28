@@ -1,4 +1,4 @@
-package io.geo.guedrbootcamp6_practica
+package io.geo.guedrbootcamp6_practica.fragment
 
 import android.app.Activity
 import android.app.Fragment
@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
 import android.view.*
+import io.geo.guedrbootcamp6_practica.model.Forecast
+import io.geo.guedrbootcamp6_practica.R
+import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
+import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
 import kotlinx.android.synthetic.main.fragment_forecast.*
 
 class ForecastFragment: Fragment() {

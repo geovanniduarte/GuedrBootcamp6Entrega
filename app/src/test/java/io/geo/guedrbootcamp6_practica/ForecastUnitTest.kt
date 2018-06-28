@@ -1,5 +1,7 @@
 package io.geo.guedrbootcamp6_practica
 
+import io.geo.guedrbootcamp6_practica.model.Forecast
+import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
