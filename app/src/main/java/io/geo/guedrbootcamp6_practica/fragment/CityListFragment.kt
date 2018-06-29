@@ -1,6 +1,8 @@
 package io.geo.guedrbootcamp6_practica.fragment
 
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -32,6 +34,8 @@ class CityListFragment : Fragment() {
         fun newInstance() = CityListFragment()
     }
 
+    private var onCitySelectedListener: OnCitySelectedListener? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_city_list, container, false)
@@ -48,6 +52,39 @@ class CityListFragment : Fragment() {
                 cities.toArray())
 
         city_list.adapter = adapter
+        city_list.setOnItemClickListener { _, _, index, _ ->
+            //Avisamos al listener que una ciudad ha sido seleccionada
+            onCitySelectedListener?.onCitySelected(cities[index], index)
+        }
 
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+    }
+
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        commonAttach(activity)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onCitySelectedListener = null
+    }
+
+    fun commonAttach(activity: Activity?) {
+        if (activity is OnCitySelectedListener) {
+            onCitySelectedListener = activity
+        }
+        else {
+            onCitySelectedListener = null
+        }
+    }
+
+
+
+    interface OnCitySelectedListener {
+        fun onCitySelected(city: City, position: Int)
     }
 }
