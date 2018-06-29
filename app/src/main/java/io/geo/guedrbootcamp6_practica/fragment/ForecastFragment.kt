@@ -1,19 +1,42 @@
 package io.geo.guedrbootcamp6_practica.fragment
 
 import android.app.Activity
-import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.view.*
 import io.geo.guedrbootcamp6_practica.model.Forecast
 import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
+import io.geo.guedrbootcamp6_practica.model.City
 import kotlinx.android.synthetic.main.fragment_forecast.*
 
 class ForecastFragment: Fragment() {
+
+    companion object {
+
+        val ARG_CITY = "ARG_CITY"
+
+        fun newInstance(city: City) : Fragment {
+            // Nos creamos el fragment
+            val fragment = ForecastFragment()
+
+            //Nos creamos los arg del fragment
+            val arguments = Bundle()
+            arguments.putSerializable(ARG_CITY, city)
+
+            //Asignamos los arg al fragment
+            fragment.arguments = arguments
+
+            //Devolvermos el fragment
+            return fragment
+        }
+    }
+
+
     val REQUEST_SETTINGS = 1
     val PREFERENCE_UNITS = "UNITS"
 
@@ -36,21 +59,19 @@ class ForecastFragment: Fragment() {
             else -> TemperatureUnit.FAHRENHEIT
         }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         var root = inflater?.inflate(R.layout.fragment_forecast, container, false)
-
-        return  root!!
-
+        return  root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        forecast = Forecast(25f,
-                10f,
-                35f,
-                "Soleado con alguna nube",
-                R.drawable.ico_01)
+
+        if (arguments != null) {
+            val city = arguments?.getSerializable(ARG_CITY) as City
+            forecast = city.forecast
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +88,7 @@ class ForecastFragment: Fragment() {
         when(item?.itemId) {
             R.id.menu_show_settings -> {
                 //lanzamos la pantalla de ajustes
-                startActivityForResult(SettingsActivity.intent(activity, units),
+                startActivityForResult(SettingsActivity.intent(activity!!, units),
                         REQUEST_SETTINGS)
                 return true
             }
@@ -95,7 +116,7 @@ class ForecastFragment: Fragment() {
                         getString(R.string.user_selects_fahrenheit)
 
                     //Toast.makeText(this, newUnitsString, Toast.LENGTH_LONG).show()
-                    Snackbar.make(view, newUnitsString, Snackbar.LENGTH_LONG)
+                    Snackbar.make(view!!, newUnitsString, Snackbar.LENGTH_LONG)
                             .setAction("Deshacer", View.OnClickListener {
                                 PreferenceManager.getDefaultSharedPreferences(activity)
                                         .edit()
