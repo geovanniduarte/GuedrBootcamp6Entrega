@@ -44,17 +44,15 @@ class CityListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val cities = Cities()
-
         val adapter = ArrayAdapter<City>(
                 activity,
                 android.R.layout.simple_list_item_1,
-                cities.toArray())
+                Cities.toArray())
 
         city_list.adapter = adapter
         city_list.setOnItemClickListener { _, _, index, _ ->
             //Avisamos al listener que una ciudad ha sido seleccionada
-            onCitySelectedListener?.onCitySelected(cities[index], index)
+            onCitySelectedListener?.onCitySelected(Cities[index], index)
         }
 
     }

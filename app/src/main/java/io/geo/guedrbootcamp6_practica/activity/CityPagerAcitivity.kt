@@ -29,23 +29,22 @@ class CityPagerAcitivity : AppCompatActivity() {
         }
     }
 
-    private val cities = Cities()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_city_pager_acitivity)
-        toolbar.setLogo(R.mipmap.ic_launcher)
+        //toolbar.setLogo(R.mipmap.ic_launcher)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val adapter = object: FragmentPagerAdapter(supportFragmentManager) {
-            override fun getCount() = cities.count
+            override fun getCount() = Cities.count
 
             override fun getItem(position: Int): Fragment {
-                return ForecastFragment.newInstance(cities.getCity(position))
+                return ForecastFragment.newInstance(Cities.getCity(position))
             }
 
             override fun getPageTitle(position: Int): CharSequence? {
-                return cities.getCity(position).name
+                return Cities.getCity(position).name
             }
 
         }
@@ -70,7 +69,7 @@ class CityPagerAcitivity : AppCompatActivity() {
     }
 
     fun updateCityInfo(position: Int) {
-        supportActionBar?.title = cities.getCity(position).name
+        supportActionBar?.title = Cities.getCity(position).name
     }
 
     private fun moveToCity(position: Int) {
@@ -90,6 +89,10 @@ class CityPagerAcitivity : AppCompatActivity() {
             }
             R.id.next -> {
                 view_pager.currentItem = view_pager.currentItem +1
+                true
+            }
+            android.R.id.home -> {
+                finish()
                 true
             }
             else ->  super.onOptionsItemSelected(item)
