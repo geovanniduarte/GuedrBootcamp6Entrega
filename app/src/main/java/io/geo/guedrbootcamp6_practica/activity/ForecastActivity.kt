@@ -37,7 +37,7 @@ class ForecastActivity : AppCompatActivity(), CityListFragment.OnCitySelectedLis
             if (supportFragmentManager.findFragmentById(R.id.view_pager_fragment) == null) {
                 supportFragmentManager.beginTransaction()
                         .add(R.id.view_pager_fragment, CityPagerFragment.newInstance(0))
-                        .commit() // TODO: nos falta anadir el nuevo fragment
+                        .commit()
             }
         }
 
