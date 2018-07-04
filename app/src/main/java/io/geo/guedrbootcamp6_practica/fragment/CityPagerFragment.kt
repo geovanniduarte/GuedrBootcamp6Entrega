@@ -28,8 +28,13 @@ class CityPagerFragment: Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return super.onCreateView(inflater, container, savedInstanceState)
+            super.onCreateView(inflater, container, savedInstanceState)
             return inflater.inflate(R.layout.fragment_city_pager, container, false)
     }
 
@@ -64,12 +69,14 @@ class CityPagerFragment: Fragment() {
 
         })
 
-        if(arguments != null) {
-            val initialCityIndex = arguments?.getInt(ARG_CITY, 0)
+
+        val initialCityIndex = arguments?.getInt(ARG_CITY, 0)
+
+        if (initialCityIndex != null) {
+            moveToCity(initialCityIndex)
+            updateCityInfo(initialCityIndex)
         }
 
-        moveToCity(initialCityIndex)
-        updateCityInfo(initialCityIndex)
     }
 
     fun updateCityInfo(position: Int) {
@@ -88,6 +95,26 @@ class CityPagerFragment: Fragment() {
         inflater?.inflate(R.menu.pager_navigation, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item.itemId)
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
+        R.id.previous -> {
+            view_pager.currentItem = view_pager.currentItem + 1
+            true
+        }
+        R.id.next -> {
+            view_pager.currentItem = view_pager.currentItem - 1
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+        val previousMenu = menu?.findItem(R.id.previous)
+        val nextMenu = menu?.findItem(R.id.next)
+
+        val adapter = view_pager.adapter!!
+        previousMenu?.isEnabled = view_pager.currentItem > 0
+        nextMenu?.isEnabled = view_pager.currentItem < adapter.count -1
+    }
 
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.fragment.CityListFragment
+import io.geo.guedrbootcamp6_practica.fragment.CityPagerFragment
 import io.geo.guedrbootcamp6_practica.model.City
 
 
@@ -34,12 +35,11 @@ class ForecastActivity : AppCompatActivity(), CityListFragment.OnCitySelectedLis
         if (findViewById<ViewGroup>(R.id.view_pager_fragment) != null) {
             //Hemos cargado una interfaz que tiene el hueco para el fragment citypagerfragment
             if (supportFragmentManager.findFragmentById(R.id.view_pager_fragment) == null) {
-                fragmentManager.beginTransaction()
+                supportFragmentManager.beginTransaction()
+                        .add(R.id.view_pager_fragment, CityPagerFragment.newInstance(0))
                         .commit() // TODO: nos falta anadir el nuevo fragment
             }
         }
-
-
 
     }
 

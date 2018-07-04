@@ -9,10 +9,12 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
 import io.geo.guedrbootcamp6_practica.R
+import io.geo.guedrbootcamp6_practica.fragment.CityPagerFragment
 import io.geo.guedrbootcamp6_practica.fragment.ForecastFragment
 import io.geo.guedrbootcamp6_practica.model.Cities
-import kotlinx.android.synthetic.main.fragment_city_pager.*
+import kotlinx.android.synthetic.main.activity_city_pager.*
 
 
 class CityPagerAcitivity : AppCompatActivity() {
@@ -35,44 +37,15 @@ class CityPagerAcitivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val adapter = object: FragmentPagerAdapter(supportFragmentManager) {
-            override fun getCount() = Cities.count
-
-            override fun getItem(position: Int): Fragment {
-                return ForecastFragment.newInstance(Cities.getCity(position))
-            }
-
-            override fun getPageTitle(position: Int): CharSequence? {
-                return Cities.getCity(position).name
-            }
-
-        }
-
-        view_pager.adapter = adapter
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                updateCityInfo(position)
-            }
-
-        })
         val initialCityIndex = intent.getIntExtra(EXTRA_CITY, 0)
-        moveToCity(initialCityIndex)
-        updateCityInfo(initialCityIndex)
-    }
 
-    fun updateCityInfo(position: Int) {
-        supportActionBar?.title = Cities.getCity(position).name
-    }
-
-    private fun moveToCity(position: Int) {
-        view_pager.currentItem = position
+        // Creo, si hace falta el CityPagerFragment pasandole la ciudad inicial
+        if (supportFragmentManager.findFragmentById(R.id.view_pager_fragment)  == null) {
+            val fragment: CityPagerFragment = CityPagerFragment.newInstance(initialCityIndex)
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.view_pager_fragment, fragment)
+                    .commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,18 +61,6 @@ class CityPagerAcitivity : AppCompatActivity() {
             }
             else ->  super.onOptionsItemSelected(item)
         }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        super.onPrepareOptionsMenu(menu)
-
-        val previousMenu = menu?.findItem(R.id.previous)
-        val nextMenu = menu?.findItem(R.id.next)
-
-        val adapter = view_pager.adapter!!
-        previousMenu?.isEnabled = view_pager.currentItem > 0
-        nextMenu?.isEnabled = view_pager.currentItem < adapter.count -1
-        return true
-    }
 
 }
 
