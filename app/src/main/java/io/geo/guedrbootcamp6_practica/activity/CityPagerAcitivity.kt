@@ -12,8 +12,7 @@ import android.view.MenuItem
 import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.fragment.ForecastFragment
 import io.geo.guedrbootcamp6_practica.model.Cities
-import io.geo.guedrbootcamp6_practica.model.City
-import kotlinx.android.synthetic.main.activity_city_pager_acitivity.*
+import kotlinx.android.synthetic.main.fragment_city_pager.*
 
 
 class CityPagerAcitivity : AppCompatActivity() {
@@ -31,7 +30,7 @@ class CityPagerAcitivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_city_pager_acitivity)
+        setContentView(R.layout.fragment_city_pager)
         //toolbar.setLogo(R.mipmap.ic_launcher)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -83,14 +82,6 @@ class CityPagerAcitivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) =  when(item?.itemId) {
-            R.id.previous -> {
-                view_pager.currentItem = view_pager.currentItem -1
-                true
-            }
-            R.id.next -> {
-                view_pager.currentItem = view_pager.currentItem +1
-                true
-            }
             android.R.id.home -> {
                 finish()
                 true
