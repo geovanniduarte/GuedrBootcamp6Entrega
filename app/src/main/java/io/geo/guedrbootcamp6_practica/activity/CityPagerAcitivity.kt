@@ -32,7 +32,7 @@ class CityPagerAcitivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_city_pager)
+        setContentView(R.layout.activity_city_pager)
         //toolbar.setLogo(R.mipmap.ic_launcher)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
