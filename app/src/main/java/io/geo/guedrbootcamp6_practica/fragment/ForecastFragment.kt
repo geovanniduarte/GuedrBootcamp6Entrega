@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import io.geo.guedrbootcamp6_practica.model.Forecast
 import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
 import io.geo.guedrbootcamp6_practica.model.City
+import kotlinx.android.synthetic.main.content_forecast.*
 import kotlinx.android.synthetic.main.fragment_forecast.*
+
 
 class ForecastFragment: Fragment() {
 
@@ -36,20 +40,22 @@ class ForecastFragment: Fragment() {
         }
     }
 
+    private  enum class VIEW_INDEX(val index: Int) {
+        LOADING(0), FORECAST(1)
+    }
 
     val REQUEST_SETTINGS = 1
     val PREFERENCE_UNITS = "UNITS"
 
-    var forecast: Forecast? = null
+    var forecast: List<Forecast>? = null
         set(value) {
             field = value
             if (value != null) {
-                forecast_image.setImageResource(value.icon)
-                forecast_description.text = value.description
-
-                updateTemperatureView()
-                humidity.text = getString(R.string.humidity_format, value.humidity)
+               // forecast_list.adapter =
             }
+ //        if (value != null) {
+//
+//           }
         }
     //variable que indica las unidades en las que queremos la temperatura, por defecto celsius
     val units : TemperatureUnit
@@ -68,10 +74,27 @@ class ForecastFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null) {
+        // Configuramos las animaciones para el viewSwitcher
+        view_switcher.setInAnimation(activity, android.R.anim.fade_in)
+        view_switcher.setOutAnimation(activity, android.R.anim.fade_out)
+
+        //Le decimos al viewswitcher que muestre la primera vista
+        view_switcher.displayedChild = VIEW_INDEX.LOADING.index
+        view.postDelayed({
+
+            //Aqui simulamos que ya nos hemos bajado la informaciond el tiempo.
+            //Configuramos el ReciclerView, primero decidimos como se vusualizan sus elementos.
+            forecast_list.layoutManager = LinearLayoutManager(activity)
+
+            // Le decimos quien es el que anima el ReciclerView
+            forecast_list.itemAnimator = DefaultItemAnimator()
+
+            // Le decimos los datos que van a llenar el ReciclerView. Eso lo hace el setter
+
             val city = arguments?.getSerializable(ARG_CITY) as City
             forecast = city.forecast
-        }
+            view_switcher.displayedChild = VIEW_INDEX.FORECAST.index
+        }, resources.getInteger(R.integer.default_fake_delay).toLong())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,8 +163,8 @@ class ForecastFragment: Fragment() {
     // Aquí actualizaremos la interfaz con las temperaturas
     fun updateTemperatureView() {
         val unitsString = units2String()
-        max_temp?.text = getString(R.string.max_temp_format, forecast?.getMaxTemp(units), unitsString)
-        min_temp?.text = getString(R.string.min_temp_format, forecast?.getMinTemp(units), unitsString)
+//        max_temp?.text = getString(R.string.max_temp_format, forecast?.getMaxTemp(units), unitsString)
+//        min_temp?.text = getString(R.string.min_temp_format, forecast?.getMinTemp(units), unitsString)
     }
 
     fun units2String() = if (units == TemperatureUnit.CELSIUS) "ºC" else "F"
