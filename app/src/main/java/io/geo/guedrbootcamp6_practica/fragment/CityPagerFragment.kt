@@ -86,7 +86,7 @@ class CityPagerFragment: Fragment() {
         }
     }
 
-    private fun moveToCity(position: Int) {
+    fun moveToCity(position: Int) {
         view_pager.currentItem = position
     }
 
@@ -97,11 +97,11 @@ class CityPagerFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.previous -> {
-            view_pager.currentItem = view_pager.currentItem + 1
+            view_pager.currentItem = view_pager.currentItem - 1
             true
         }
         R.id.next -> {
-            view_pager.currentItem = view_pager.currentItem - 1
+            view_pager.currentItem = view_pager.currentItem + 1
             true
         }
         else -> super.onOptionsItemSelected(item)
