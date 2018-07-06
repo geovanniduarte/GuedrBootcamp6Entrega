@@ -27,6 +27,7 @@ class ForecastRecyclerViewAdapter(private val forecast: List<Forecast>): Recycle
     }
 
     inner class ForecastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val dayText = itemView.findViewById<TextView>(R.id.day)
         val forecastImage = itemView.findViewById<ImageView?>(R.id.forecast_image)
         val maxTemp = itemView.findViewById<TextView?>(R.id.max_temp)
         val minTemp = itemView.findViewById<TextView?>(R.id.min_temp)
@@ -40,6 +41,7 @@ class ForecastRecyclerViewAdapter(private val forecast: List<Forecast>): Recycle
             forecastDescription?.text = forecast.description
             updateTemperatureView(forecast, temperatureUnit)
             humidity?.text = context.getString(R.string.humidity_format, forecast.humidity)
+            dayText?.text = forecastDay(day)
         }
 
         fun updateTemperatureView(forecast: Forecast, unit: TemperatureUnit) {
@@ -49,6 +51,15 @@ class ForecastRecyclerViewAdapter(private val forecast: List<Forecast>): Recycle
         }
 
         fun units2String(unit: TemperatureUnit) = if (unit == TemperatureUnit.CELSIUS) "ºC" else "F"
+        
+        fun forecastDay(index: Int) = when(index) {
+            0 -> context.getString(R.string.today)
+            1 -> context.getString(R.string.tomorrow)
+            2 -> context.getString(R.string.day_after_tomorrow)
+            3 -> context.getString(R.string.day_after_after_tomorrow)
+            4 -> context.getString(R.string.day_after_after_after_tomorrow)
+            else -> context.getString(R.string.unknown_day)
+        }
     }
 
 

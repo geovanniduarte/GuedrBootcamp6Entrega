@@ -13,13 +13,27 @@
         android:padding="@dimen/default_activity_padding"
         tools:context=".fragment.ForecastFragment">
 
+       <TextView
+           android:id="@+id/day"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentTop="true"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentEnd="true"
+           android:textAppearance="@style/TextAppearance.AppCompat.Large"
+           tools:text="Hoy"
+           />
+
         <ImageView
             android:id="@+id/forecast_image"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/forecast_image_width"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_below="@id/day"
             android:contentDescription="@string/forecast_image_description"
             android:src="@drawable/ico_02" />
 

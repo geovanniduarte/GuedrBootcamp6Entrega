@@ -13,6 +13,7 @@ import io.geo.guedrbootcamp6_practica.model.Forecast
 import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
+import io.geo.guedrbootcamp6_practica.adapter.ForecastRecyclerViewAdapter
 import io.geo.guedrbootcamp6_practica.model.City
 import kotlinx.android.synthetic.main.content_forecast.*
 import kotlinx.android.synthetic.main.fragment_forecast.*
@@ -51,11 +52,8 @@ class ForecastFragment: Fragment() {
         set(value) {
             field = value
             if (value != null) {
-               // forecast_list.adapter =
+               forecast_list.adapter = ForecastRecyclerViewAdapter(value)
             }
- //        if (value != null) {
-//
-//           }
         }
     //variable que indica las unidades en las que queremos la temperatura, por defecto celsius
     val units : TemperatureUnit
@@ -162,9 +160,7 @@ class ForecastFragment: Fragment() {
 
     // Aquí actualizaremos la interfaz con las temperaturas
     fun updateTemperatureView() {
-        val unitsString = units2String()
-//        max_temp?.text = getString(R.string.max_temp_format, forecast?.getMaxTemp(units), unitsString)
-//        min_temp?.text = getString(R.string.min_temp_format, forecast?.getMinTemp(units), unitsString)
+        forecast_list?.adapter = ForecastRecyclerViewAdapter(forecast!!)
     }
 
     fun units2String() = if (units == TemperatureUnit.CELSIUS) "ºC" else "F"
