@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import io.geo.guedrbootcamp6_practica.model.Forecast
@@ -14,7 +15,9 @@ import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
 import io.geo.guedrbootcamp6_practica.adapter.ForecastRecyclerViewAdapter
+import io.geo.guedrbootcamp6_practica.getTemperatureUnits
 import io.geo.guedrbootcamp6_practica.model.City
+import io.geo.guedrbootcamp6_practica.setTemperatureUnits
 import kotlinx.android.synthetic.main.content_forecast.*
 import kotlinx.android.synthetic.main.fragment_forecast.*
 
@@ -46,7 +49,6 @@ class ForecastFragment: Fragment() {
     }
 
     val REQUEST_SETTINGS = 1
-    val PREFERENCE_UNITS = "UNITS"
 
     var forecast: List<Forecast>? = null
         set(value) {
@@ -54,13 +56,6 @@ class ForecastFragment: Fragment() {
             if (value != null) {
                forecast_list.adapter = ForecastRecyclerViewAdapter(value)
             }
-        }
-    //variable que indica las unidades en las que queremos la temperatura, por defecto celsius
-    val units : TemperatureUnit
-        get () = when ( PreferenceManager.getDefaultSharedPreferences(activity)
-                .getInt(PREFERENCE_UNITS, TemperatureUnit.CELSIUS.ordinal)) {
-            TemperatureUnit.CELSIUS.ordinal -> TemperatureUnit.CELSIUS
-            else -> TemperatureUnit.FAHRENHEIT
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -82,7 +77,7 @@ class ForecastFragment: Fragment() {
 
             //Aqui simulamos que ya nos hemos bajado la informaciond el tiempo.
             //Configuramos el ReciclerView, primero decidimos como se vusualizan sus elementos.
-            forecast_list.layoutManager = LinearLayoutManager(activity)
+            forecast_list.layoutManager =  GridLayoutManager(activity, resources.getInteger(R.integer.forecast_columns))
 
             // Le decimos quien es el que anima el ReciclerView
             forecast_list.itemAnimator = DefaultItemAnimator()
@@ -109,7 +104,7 @@ class ForecastFragment: Fragment() {
         when(item?.itemId) {
             R.id.menu_show_settings -> {
                 //lanzamos la pantalla de ajustes
-                startActivityForResult(SettingsActivity.intent(activity!!, units),
+                startActivityForResult(SettingsActivity.intent(activity!!, getTemperatureUnits(activity!!)),
                         REQUEST_SETTINGS)
                 return true
             }
@@ -123,12 +118,9 @@ class ForecastFragment: Fragment() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     //Volvemos de settings con datos sobre las unidades elegidads por el usuario.
                     val newUnits = data.getSerializableExtra(SettingsActivity.EXTRA_UNITS) as TemperatureUnit
-                    val oldUnits = units
+                    val oldUnits = getTemperatureUnits(activity!!)
                     //Guardamos las preferenciaas del usuario
-                    PreferenceManager.getDefaultSharedPreferences(activity)
-                            .edit()
-                            .putInt(PREFERENCE_UNITS, newUnits.ordinal)
-                            .apply()
+                    setTemperatureUnits(activity!!, newUnits)
 
                     //Actualizo la interfaz con las nuevas unidades.
                     updateTemperatureView()
@@ -139,10 +131,7 @@ class ForecastFragment: Fragment() {
                     //Toast.makeText(this, newUnitsString, Toast.LENGTH_LONG).show()
                     Snackbar.make(view!!, newUnitsString, Snackbar.LENGTH_LONG)
                             .setAction("Deshacer", View.OnClickListener {
-                                PreferenceManager.getDefaultSharedPreferences(activity)
-                                        .edit()
-                                        .putInt(PREFERENCE_UNITS, oldUnits.ordinal)
-                                        .apply()
+                                setTemperatureUnits(activity!!, oldUnits)
                                 updateTemperatureView()
                             })
                             .show()
@@ -163,5 +152,5 @@ class ForecastFragment: Fragment() {
         forecast_list?.adapter = ForecastRecyclerViewAdapter(forecast!!)
     }
 
-    fun units2String() = if (units == TemperatureUnit.CELSIUS) "ºC" else "F"
+    fun units2String() = if (getTemperatureUnits(activity!!) == TemperatureUnit.CELSIUS) "ºC" else "F"
 }

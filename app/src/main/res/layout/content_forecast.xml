@@ -43,8 +43,8 @@
             android:layout_alignBottom="@id/forecast_image"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/forecast_image"
+            android:layout_below="@+id/day"
             android:orientation="vertical">
 
             <TextView

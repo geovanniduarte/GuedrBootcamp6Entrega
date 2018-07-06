@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import io.geo.guedrbootcamp6_practica.R
+import io.geo.guedrbootcamp6_practica.getTemperatureUnits
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import kotlinx.android.synthetic.main.content_forecast.view.*
 
@@ -23,7 +24,7 @@ class ForecastRecyclerViewAdapter(private val forecast: List<Forecast>): Recycle
     override fun getItemCount() = forecast.size
 
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {
-       holder.bindForecast(forecast[position], TemperatureUnit.CELSIUS, position)
+       holder.bindForecast(forecast[position], getTemperatureUnits(holder.itemView.context), position)
     }
 
     inner class ForecastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
