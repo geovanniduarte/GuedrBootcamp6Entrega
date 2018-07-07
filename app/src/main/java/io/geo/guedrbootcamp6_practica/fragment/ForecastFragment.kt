@@ -12,10 +12,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import io.geo.guedrbootcamp6_practica.model.Forecast
 import io.geo.guedrbootcamp6_practica.R
+import io.geo.guedrbootcamp6_practica.activity.DetailActivity
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
 import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
 import io.geo.guedrbootcamp6_practica.adapter.ForecastRecyclerViewAdapter
 import io.geo.guedrbootcamp6_practica.getTemperatureUnits
+import io.geo.guedrbootcamp6_practica.model.Cities
 import io.geo.guedrbootcamp6_practica.model.City
 import io.geo.guedrbootcamp6_practica.setTemperatureUnits
 import kotlinx.android.synthetic.main.content_forecast.*
@@ -54,7 +56,9 @@ class ForecastFragment: Fragment() {
         set(value) {
             field = value
             if (value != null) {
-               forecast_list.adapter = ForecastRecyclerViewAdapter(value)
+                val adapter = ForecastRecyclerViewAdapter(value)
+                forecast_list.adapter = adapter
+                setRecyclerViewClickListener()
             }
         }
 
@@ -144,6 +148,19 @@ class ForecastFragment: Fragment() {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && forecast != null) {
             updateTemperatureView()
+        }
+    }
+
+    fun setRecyclerViewClickListener() {
+        val adapter = forecast_list.adapter as? ForecastRecyclerViewAdapter
+        // Si alguien ha pulsado un elemento del ReciclerView, nos queremos enterar
+        adapter?.onClickListener = View.OnClickListener {
+            // Alguien ha pulsado un elemento del reciclerView
+            val forecastIndex = forecast_list.getChildAdapterPosition(it)
+            val city = arguments?.getSerializable(ARG_CITY) as City
+            val cityIndex = Cities.getIndex(city)
+
+            startActivity(DetailActivity.intent(activity!!, cityIndex, forecastIndex))
         }
     }
 
