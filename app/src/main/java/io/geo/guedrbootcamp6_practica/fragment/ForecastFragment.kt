@@ -15,7 +15,7 @@ import io.geo.guedrbootcamp6_practica.model.Forecast
 import io.geo.guedrbootcamp6_practica.R
 import io.geo.guedrbootcamp6_practica.activity.DetailActivity
 import io.geo.guedrbootcamp6_practica.model.TemperatureUnit
-import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
+//import io.geo.guedrbootcamp6_practica.activity.SettingsActivity
 import io.geo.guedrbootcamp6_practica.adapter.ForecastRecyclerViewAdapter
 import io.geo.guedrbootcamp6_practica.getTemperatureUnits
 import io.geo.guedrbootcamp6_practica.model.Cities
@@ -109,8 +109,10 @@ class ForecastFragment: Fragment() {
         when(item?.itemId) {
             R.id.menu_show_settings -> {
                 //lanzamos la pantalla de ajustes
-                startActivityForResult(SettingsActivity.intent(activity!!, getTemperatureUnits(activity!!)),
-                        REQUEST_SETTINGS)
+                //startActivityForResult(SettingsActivity.intent(activity!!, getTemperatureUnits(activity!!)), REQUEST_SETTINGS)
+                val dialog : SettingsDialog = SettingsDialog.newInstance(getTemperatureUnits(activity!!))
+                dialog.setTargetFragment(this , REQUEST_SETTINGS)
+                dialog.show(fragmentManager, null)
                 return true
             }
         }
@@ -122,7 +124,8 @@ class ForecastFragment: Fragment() {
             REQUEST_SETTINGS -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     //Volvemos de settings con datos sobre las unidades elegidads por el usuario.
-                    val newUnits = data.getSerializableExtra(SettingsActivity.EXTRA_UNITS) as TemperatureUnit
+                    //val newUnits = data.getSerializableExtra(SettingsActivity.EXTRA_UNITS) as TemperatureUnit
+                    val newUnits = data.getSerializableExtra(SettingsDialog.ARG_UNITS) as TemperatureUnit
                     val oldUnits = getTemperatureUnits(activity!!)
                     //Guardamos las preferenciaas del usuario
                     setTemperatureUnits(activity!!, newUnits)
@@ -175,6 +178,7 @@ class ForecastFragment: Fragment() {
     // Aquí actualizaremos la interfaz con las temperaturas
     fun updateTemperatureView() {
         forecast_list?.adapter = ForecastRecyclerViewAdapter(forecast!!)
+        setRecyclerViewClickListener()
     }
 
     fun units2String() = if (getTemperatureUnits(activity!!) == TemperatureUnit.CELSIUS) "ºC" else "F"
