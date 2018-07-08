@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
@@ -160,7 +161,14 @@ class ForecastFragment: Fragment() {
             val city = arguments?.getSerializable(ARG_CITY) as City
             val cityIndex = Cities.getIndex(city)
 
-            startActivity(DetailActivity.intent(activity!!, cityIndex, forecastIndex))
+            //Opciones especiales para navegar con vistas comunes
+            val animationOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    activity!!,
+                    it,
+                    getString(R.string.transtion_to_detail)
+            )
+
+            startActivity(DetailActivity.intent(activity!!, cityIndex, forecastIndex), animationOptions.toBundle())
         }
     }
 

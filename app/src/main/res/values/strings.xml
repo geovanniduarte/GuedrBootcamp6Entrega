@@ -22,5 +22,6 @@
     <string name="day_after_after_tomorrow">Pasado pasado manana</string>
     <string name="day_after_after_after_tomorrow">Pasado pasado pasado manana</string>
     <string name="unknown_day">Dia desconocido</string>
+    <string name="transtion_to_detail">transition_to_detail</string>
 
 </resources>
